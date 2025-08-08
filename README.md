@@ -41,7 +41,11 @@ A lightweight Python client for managing webhooks via the Credo AI API. Supports
 git clone <repository-url>
 cd webhooks
 poetry install
-poetry shell
+poetry env info --path
+source $(poetry env info --path)/bin/activate  # macOS/Linux
+# or
+$(poetry env info --path)\Scripts\activate.bat  # Windows
+
 ```
 
 
