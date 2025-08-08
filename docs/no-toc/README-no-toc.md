@@ -4,7 +4,7 @@
 A lightweight Python client for managing webhooks via the Credo AI API. Supports creating, reading, updating, and deleting webhooks with minimal setup.
 
 <!-- omit in toc -->
-# Table of Contents
+## Table of Contents
 [TOC]
 
 ## 1. Installation

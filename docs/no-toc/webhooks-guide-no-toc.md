@@ -3,30 +3,8 @@
 
 <!-- omit in toc -->
 ## Table of Contents
-<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
+[TOC]
 
-- [1. About Webhooks](#1-about-webhooks)
-- [2. Testing Webhooks (Quick Flow)](#2-testing-webhooks-quick-flow)
-- [3. Configuring Webhooks](#3-configuring-webhooks)
-  - [3.1 Example `POST` Request to Create a Webhook](#31-example-post-request-to-create-a-webhook)
-  - [3.2 Webhook Configuration Example (OAuth)](#32-webhook-configuration-example-oauth)
-  - [3.3 Webhook Attribute Reference](#33-webhook-attribute-reference)
-- [4. Event Types](#4-event-types)
-  - [4.1 Use Case Metadata Updates](#41-use-case-metadata-updates)
-    - [4.1.1 Supported Metadata Fields](#411-supported-metadata-fields)
-    - [4.1.2 Example Payload](#412-example-payload)
-  - [4.2 Use Case Custom Field Updates](#42-use-case-custom-field-updates)
-    - [4.2.1 Example Payload](#421-example-payload)
-  - [4.3 Use Case Review Events](#43-use-case-review-events)
-    - [4.3.1 Review Comment Added](#431-review-comment-added)
-    - [4.3.2 Use Case Review Status Updated](#432-use-case-review-status-updated)
-  - [4.4 Use Case Review Task Events](#44-use-case-review-task-events)
-    - [4.4.1 Review Task Status Updated](#441-review-task-status-updated)
-    - [4.4.2 Review Task Deleted](#442-review-task-deleted)
-
-<!-- TOC end -->
-
-<!-- TOC --><a name="1-about-webhooks"></a>
 ## 1. About Webhooks
 
 Credo AI supports outbound webhooks, enabling customers and third parties to receive real-time updates about events occurring within the platform.
@@ -40,7 +18,6 @@ Instead of polling the API to check for new data, webhooks push relevant updates
 * Monitoring review status updates
 
 
-<!-- TOC --><a name="2-testing-webhooks-quick-flow"></a>
 ## 2. Testing Webhooks (Quick Flow)
 
 1. **Generate a listener URL** using your own event server, or a tool like [Svix Play](https://app.svix.com/play).
@@ -48,7 +25,6 @@ Instead of polling the API to check for new data, webhooks push relevant updates
 3. **Trigger events** in the Credo AI platform that match your subscribed `event_types`.
 4. **Inspect payloads** received at your webhook URL via your server logs or Svix dashboard.
 
-<!-- TOC --><a name="3-configuring-webhooks"></a>
 ## 3. Configuring Webhooks
 
 > *Note: This guide assumes familiarity with the Credo AI API and authenticated access via an API key.*
@@ -65,7 +41,6 @@ You can manage webhooks via the Credo AI API using the `/webhooks` endpoint. Eac
   * `authentication_server`
 
 
-<!-- TOC --><a name="31-example-post-request-to-create-a-webhook"></a>
 ### 3.1 Example `POST` Request to Create a Webhook
 
 ```http
@@ -113,7 +88,6 @@ payload = {
 client.create_webhook(payload)
 ```
 
-<!-- TOC --><a name="32-webhook-configuration-example-oauth"></a>
 ### 3.2 Webhook Configuration Example (OAuth)
 
 ```json
@@ -141,7 +115,6 @@ client.create_webhook(payload)
 ```
 
 
-<!-- TOC --><a name="33-webhook-attribute-reference"></a>
 ### 3.3 Webhook Attribute Reference
 
 | Field                         | Required?      | Description                                                                       |
@@ -165,13 +138,11 @@ client.create_webhook(payload)
 
 ---
 
-<!-- TOC --><a name="4-event-types"></a>
 ## 4. Event Types
 
 Credo AI webhooks support a wide variety of event types, allowing external systems to respond to updates in near real-time.
 
 
-<!-- TOC --><a name="41-use-case-metadata-updates"></a>
 ### 4.1 Use Case Metadata Updates
 
 **Format:**
@@ -182,7 +153,6 @@ use_case_<metadata_field>_updated
 
 Triggered when a specific metadata field on a use case is modified.
 
-<!-- TOC --><a name="411-supported-metadata-fields"></a>
 #### 4.1.1 Supported Metadata Fields
 
 | Field                 | Event Type                             | Description                             |
@@ -198,7 +168,6 @@ Triggered when a specific metadata field on a use case is modified.
 | `is_vendor`           | `use_case_is_vendor_updated`           | Whether it’s a vendor-provided use case |
 | `questionnaire_ids`   | `use_case_questionnaire_ids_updated`   | Associated questionnaire IDs            |
 
-<!-- TOC --><a name="412-example-payload"></a>
 #### 4.1.2 Example Payload
 
 ```json
@@ -223,14 +192,12 @@ Triggered when a specific metadata field on a use case is modified.
 
 ---
 
-<!-- TOC --><a name="42-use-case-custom-field-updates"></a>
 ### 4.2 Use Case Custom Field Updates
 
 **Event Type:** `use_case_custom_field_updated`
 
 Triggered when a custom field is created, updated, or removed from a use case.
 
-<!-- TOC --><a name="421-example-payload"></a>
 #### 4.2.1 Example Payload
 
 ```json
@@ -253,10 +220,8 @@ Triggered when a custom field is created, updated, or removed from a use case.
 
 ---
 
-<!-- TOC --><a name="43-use-case-review-events"></a>
 ### 4.3 Use Case Review Events
 
-<!-- TOC --><a name="431-review-comment-added"></a>
 #### 4.3.1 Review Comment Added
 
 **Event Type:** `use_case_review_comment`
@@ -279,7 +244,6 @@ Triggered when a comment is added to a review or a reply is made.
 }
 ```
 
-<!-- TOC --><a name="432-use-case-review-status-updated"></a>
 #### 4.3.2 Use Case Review Status Updated
 
 **Event Type:** `use_case_review_status_updated`
@@ -302,10 +266,8 @@ Triggered when a review is created or its status changes.
 
 ---
 
-<!-- TOC --><a name="44-use-case-review-task-events"></a>
 ### 4.4 Use Case Review Task Events
 
-<!-- TOC --><a name="441-review-task-status-updated"></a>
 #### 4.4.1 Review Task Status Updated
 
 **Event Type:** `use_case_review_task_status_updated`
@@ -330,7 +292,6 @@ Triggered when the status or sub-status of a review task is updated.
 ```
 
 
-<!-- TOC --><a name="442-review-task-deleted"></a>
 #### 4.4.2 Review Task Deleted
 
 **Event Type:** `use_case_review_task_deleted`
