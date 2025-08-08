@@ -1,5 +1,5 @@
 <!-- omit in toc -->
-# Webhooks
+# Webhooks General Guide
 
 <!-- omit in toc -->
 ## Table of Contents
@@ -54,7 +54,7 @@ Authorization: Bearer <your-token>
     "attributes": {
       "description": "Test webhook",
       "url": "https://your-event-server.com/webhook",
-      "event_types": ["use_case_governance_status_updated"],
+      "event_types": ["use_case_review_status_updated"],
       "event_type_prefix": "CredoAI",
       "event_type_suffix": "v1",
       "environment": "production",
@@ -78,7 +78,7 @@ payload = {
         "attributes": {
             "description": "Test webhook",
             "url": client.webhook_url,
-            "event_types": ["use_case_governance_status_updated"],
+            "event_types": ["use_case_review_status_updated"],
             "environment": "production",
             "authentication_method": "none"
         }
@@ -96,7 +96,7 @@ client.create_webhook(payload)
     "attributes": {
       "description": "Webhook for order creation events",
       "event_types": [
-        "use_case_governance_status_updated",
+        "use_case_review_status_updated",
         "use_case_custom_field_updated"
       ],
       "url": "https://example.com/webhooks/orders",
@@ -157,7 +157,7 @@ Triggered when a specific metadata field on a use case is modified.
 
 | Field                 | Event Type                             | Description                             |
 | --------------------- | -------------------------------------- | --------------------------------------- |
-| `governance_status`   | `use_case_governance_status_updated`   | Governance lifecycle stage              |
+| `governance_status`   | `use_case_governance_status_updated`   | Governance lifecycle stage 🛑 DEPRECATED |
 | `risk_category_level` | `use_case_risk_category_level_updated` | Risk level or tier assigned             |
 | `name`                | `use_case_name_updated`                | Use case name                           |
 | `icon`                | `use_case_icon_updated`                | Visual icon for the use case            |
@@ -172,21 +172,25 @@ Triggered when a specific metadata field on a use case is modified.
 
 ```json
 {
-  "data": {
-    "changedFieldName": "governance_status",
-    "useCaseId": "d8zdKJNgwCgKmvN8QkSQ2H",
-    "user": {
-      "email": "steven+1@credo.ai",
-      "familyName": "Barber",
-      "givenName": "Steven",
-      "job": null,
-      "nickname": "Steven",
-      "role": "admin",
-      "userId": "G7kYiogzZE4Zxt2iGkhht9"
+  "data":{
+    "status":"in_progress",
+    "user":{
+        "email":"cemenenkoff@credo.ai",
+        "role":"admin",
+        "job":null,
+        "userId":"YNYykoSUoCxTtHtCrsmybE",
+        "nickname":"Nick",
+        "familyName":"Cemenenkoff",
+        "givenName":"Nick"
     },
-    "value": 1
+    "eventType":"use_case_review_status_updated",
+    "useCaseId":"SeFqMYkJTSqe6fXgL7GryZ",
+    "reviewId":"L7BNWLapGiuMQVNEwuS49N"
   },
-  "type": "CredoAI.use_case_governance_status_updated"
+  "type":"CredoAI.use_case_review_status_updated.v1",
+  "time":"2025-08-08T05:56:32.136590Z",
+  "source":"CredoAI",
+  "subject":"use_case_review_status_updated"
 }
 ```
 

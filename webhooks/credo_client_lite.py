@@ -3,19 +3,16 @@ import json
 import time
 import logging
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Self
 
 import requests
 from dotenv import load_dotenv
 
-
-# --- Configure logging ---
 logger = logging.getLogger("CredoClientLite")
 logger.setLevel(logging.INFO)
 
 file_handler = logging.FileHandler("webhooks.log", mode="a", encoding="utf-8")
 console_handler = logging.StreamHandler()
-
 formatter = logging.Formatter("[%(levelname)s] %(message)s")
 file_handler.setFormatter(formatter)
 console_handler.setFormatter(formatter)
@@ -24,7 +21,7 @@ logger.addHandler(file_handler)
 logger.addHandler(console_handler)
 
 
-def _log_event(method: str, endpoint: str, status: int, duration: float, label: str):
+def _log_event(method: str, endpoint: str, status: int, duration: float, label: str) -> None:
     logger.info(f"[{method}] {endpoint} - {status} ({int(duration)}ms) {label}")
 
 
@@ -37,13 +34,13 @@ class CredoClientLite:
         tenant: str,
         webhook_url: str,
         server: str = "https://api.credo.ai",
-    ):
+    ) -> None:
         self.api_key = api_key
         self.tenant = tenant
         self.webhook_url = webhook_url
         self.server = server.rstrip("/")
         self.base_url = f"{self.server}/api/v2/{self.tenant}"
-        self.auth_token: Optional[str] = None
+        self.auth_token: str | None = None
 
         self.session = requests.Session()
         self.session.headers.update({
@@ -55,7 +52,7 @@ class CredoClientLite:
         return f"CredoClientLite(tenant='{self.tenant}', server='{self.server}')"
 
     @classmethod
-    def load_config(cls, config_path: str = ".env") -> "CredoClientLite":
+    def load_config(cls, config_path: str = ".env") -> Self:
         env_path = Path(config_path)
         if not env_path.is_file():
             raise FileNotFoundError(f"Config file not found: {config_path}")
@@ -73,7 +70,9 @@ class CredoClientLite:
         auth_payload = {"api_token": self.api_key, "tenant": self.tenant}
 
         try:
-            response = self.session.post("https://api.credo.ai/auth/exchange", json=auth_payload)
+            response: requests.Response = self.session.post(
+                "https://api.credo.ai/auth/exchange", json=auth_payload
+            )
             response.raise_for_status()
             token = response.json().get("access_token")
             if token:
@@ -90,9 +89,9 @@ class CredoClientLite:
         self,
         method: str,
         endpoint: str,
-        data: Optional[Dict] = None,
+        data: dict[str, Any] | None = None,
         log_label: str = ""
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         if not self.auth_token:
             logger.error("Not authenticated. Call `authenticate()` first.")
             return None
@@ -101,7 +100,7 @@ class CredoClientLite:
         start = time.time()
         status = 500
         try:
-            response = self.session.request(method=method, url=url, json=data)
+            response: requests.Response = self.session.request(method=method, url=url, json=data)
             duration = (time.time() - start) * 1000
             status = response.status_code
             _log_event(method, endpoint, status, duration, log_label or "Request")
@@ -116,19 +115,19 @@ class CredoClientLite:
             logger.error(f"Request exception: {exc}")
             return None
 
-    def get_webhooks(self) -> Optional[Dict[str, Any]]:
+    def get_webhooks(self) -> dict[str, Any] | None:
         return self._make_request("GET", "webhooks", log_label="Get all webhooks")
 
-    def get_webhook(self, webhook_id: str) -> Optional[Dict[str, Any]]:
+    def get_webhook(self, webhook_id: str) -> dict[str, Any] | None:
         response = self._make_request("GET", f"webhooks/{webhook_id}", log_label="Get webhook")
         if response:
             logger.info("Webhook config:\n" + json.dumps(response, indent=2))
         return response
 
-    def create_webhook(self, webhook_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def create_webhook(self, webhook_data: dict[str, Any]) -> dict[str, Any] | None:
         return self._make_request("POST", "webhooks", data=webhook_data, log_label="Create webhook")
 
-    def update_webhook(self, webhook_id: str, webhook_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def update_webhook(self, webhook_id: str, webhook_data: dict[str, Any]) -> dict[str, Any] | None:
         return self._make_request("PATCH", f"webhooks/{webhook_id}", data=webhook_data, log_label="Update webhook")
 
     def delete_webhook(self, webhook_id: str) -> bool:
