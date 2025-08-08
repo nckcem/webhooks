@@ -23,6 +23,7 @@
   - [4.4 Use Case Review Task Events](#44-use-case-review-task-events)
     - [4.4.1 Review Task Status Updated](#441-review-task-status-updated)
     - [4.4.2 Review Task Deleted](#442-review-task-deleted)
+- [5. Testing Configured Webhooks](#5-testing-configured-webhooks)
 
 <!-- TOC end -->
 
@@ -355,3 +356,7 @@ Triggered when a review task is removed from a use case.
   "type": "CredoAI.use_case_review_task_deleted.v1"
 }
 ```
+
+<!-- TOC --><a name="5-testing-configured-webhooks"></a>
+## 5. Testing Configured Webhooks
+Check out the [webhooks-testing-guide.md](/docs/webhooks-testing-guide.md)

@@ -316,3 +316,6 @@ Triggered when a review task is removed from a use case.
   "type": "CredoAI.use_case_review_task_deleted.v1"
 }
 ```
+
+## 5. Testing Configured Webhooks
+Check out the [webhooks-testing-guide.md](/docs/webhooks-testing-guide.md)

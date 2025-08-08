@@ -183,4 +183,4 @@ client = CredoClientLite(
 * `use_case_review_status_updated`
 * `use_case_review_task_status_updated`
 
-For an exhaustive list, see [WEBHOOKS_README.md](/WEBHOOKS_README.md).
+For an exhaustive list, see [webhooks-general-guide.md](/docs/webhooks-general-guide.md).
