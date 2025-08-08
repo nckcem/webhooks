@@ -52,7 +52,7 @@ if __name__ == "__main__":
     client = CredoClientLite.load_config()
 
     if not client.authenticate():
-        exit("❌ Authentication failed")
+        exit("Authentication failed.")
 
     webhook_id = create_webhook(client)
     if webhook_id:
@@ -60,4 +60,4 @@ if __name__ == "__main__":
         update_webhook(client, webhook_id)
         client.delete_webhook(webhook_id)
     else:
-        exit("❌ Failed to create webhook")
+        exit("Failed to create webhook.")

@@ -5,6 +5,8 @@ output
 img
 logs
 swagger.json
+docs/prompts/
+docs/old/
 
 # Ignore all .env* files in the root directory
 /.env*
