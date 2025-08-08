@@ -4,6 +4,7 @@ notes
 output
 img
 logs
+swagger.json
 
 # Ignore all .env* files in the root directory
 /.env*
