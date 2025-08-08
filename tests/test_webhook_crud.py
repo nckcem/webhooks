@@ -8,7 +8,7 @@ def create_webhook(client: CredoClientLite) -> str:
             "type": "webhook",
             "attributes": {
                 "description": "Test webhook",
-                "event_types": ["use_case_governance_status_updated"],
+                "event_types": ["use_case_review_status_updated"],
                 "url": client.webhook_url,
                 "event_type_prefix": "CredoAI",
                 "event_type_suffix": "v1",
@@ -36,7 +36,7 @@ def update_webhook(client: CredoClientLite, webhook_id: str):
             "attributes": {
                 "description": "Updated test webhook",
                 "url": updated_url,
-                "event_types": ["use_case_governance_status_updated"],
+                "event_types": ["use_case_review_status_updated"],
                 "event_type_prefix": "CredoAI",
                 "event_type_suffix": "v1",
                 "environment": "production",
