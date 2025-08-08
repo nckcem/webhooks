@@ -134,7 +134,7 @@ payload = {
         "attributes": {
             "description": "My test webhook",
             "url": client.webhook_url,
-            "event_types": ["use_case_governance_status_updated"],
+            "event_types": ["use_case_review_status_updated"],
             "event_type_prefix": "CredoAI",
             "event_type_suffix": "v1",
             "environment": "production",
@@ -176,7 +176,8 @@ client = CredoClientLite(
 <!-- TOC --><a name="63-webhook-event-types-examples"></a>
 ### 6.3 Webhook Event Types (Examples)
 
-* `use_case_governance_status_updated`
+* `use_case_governance_status_updated` 🛑 DEPRECATED
+* `use_case_review_status_updated`
 * `use_case_custom_field_updated`
 * `use_case_review_comment`
 * `use_case_review_status_updated`
