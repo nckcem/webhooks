@@ -75,7 +75,7 @@ $(poetry env info --path)\Scripts\activate.bat  # Windows
 ### 3.1 Load and Authenticate
 
 ```python
-from app.credo_client_lite import CredoClientLite
+from src.app.credo_client_lite import CredoClientLite
 
 client = CredoClientLite.load_config()
 
