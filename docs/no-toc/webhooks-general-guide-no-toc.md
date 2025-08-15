@@ -67,7 +67,7 @@ Authorization: Bearer <your-token>
 **Programmatic example using `CredoClientLite`:**
 
 ```python
-from webhooks.credo_client_lite import CredoClientLite
+from app.credo_client_lite import CredoClientLite
 
 client = CredoClientLite.load_config()
 client.authenticate()

@@ -1,4 +1,4 @@
-from webhooks.credo_client_lite import CredoClientLite
+from src.app.credo_client_lite import CredoClientLite
 
 
 def create_webhook(client: CredoClientLite) -> str:

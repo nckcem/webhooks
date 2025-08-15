@@ -75,7 +75,7 @@ $(poetry env info --path)\Scripts\activate.bat  # Windows
 ### 3.1 Load and Authenticate
 
 ```python
-from webhooks.credo_client_lite import CredoClientLite
+from app.credo_client_lite import CredoClientLite
 
 client = CredoClientLite.load_config()
 
@@ -91,7 +91,7 @@ else:
 To test your setup and list all webhooks:
 
 ```bash
-poetry run python webhooks/credo_client_lite.py
+poetry run python src/app/credo_client_lite.py
 ```
 
 
@@ -101,7 +101,7 @@ poetry run python webhooks/credo_client_lite.py
 Run the test script to exercise the full webhook lifecycle:
 
 ```bash
-poetry run python tests/test_webhook_crud.py
+poetry run python src/tests/test_webhook_crud.py
 ```
 
 This test will:

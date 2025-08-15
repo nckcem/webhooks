@@ -2,31 +2,33 @@ import os
 import json
 import time
 import logging
+from urllib.parse import urljoin
 from pathlib import Path
 from typing import Any, Self
 
 import requests
 from dotenv import load_dotenv
 
+# --- Logging Setup ---
 logger = logging.getLogger("CredoClientLite")
 logger.setLevel(logging.INFO)
-
 file_handler = logging.FileHandler("webhooks.log", mode="a", encoding="utf-8")
 console_handler = logging.StreamHandler()
 formatter = logging.Formatter("[%(levelname)s] %(message)s")
 file_handler.setFormatter(formatter)
 console_handler.setFormatter(formatter)
-
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
 
 
-def _log_event(method: str, endpoint: str, status: int, duration: float, label: str) -> None:
+def _log_event(
+    method: str, endpoint: str, status: int, duration: float, label: str
+) -> None:
     logger.info(f"[{method}] {endpoint} - {status} ({int(duration)}ms) {label}")
 
 
 class CredoClientLite:
-    """Lightweight client for interacting with the Credo AI webhook API."""
+    """Lightweight HTTP client for interacting with the Credo AI webhook API."""
 
     def __init__(
         self,
@@ -43,10 +45,12 @@ class CredoClientLite:
         self.auth_token: str | None = None
 
         self.session = requests.Session()
-        self.session.headers.update({
-            "Content-Type": "application/vnd.api+json",
-            "Accept": "application/vnd.api+json"
-        })
+        self.session.headers.update(
+            {
+                "Content-Type": "application/vnd.api+json",
+                "Accept": "application/vnd.api+json",
+            }
+        )
 
     def __repr__(self) -> str:
         return f"CredoClientLite(tenant='{self.tenant}', server='{self.server}')"
@@ -90,28 +94,34 @@ class CredoClientLite:
         method: str,
         endpoint: str,
         data: dict[str, Any] | None = None,
-        log_label: str = ""
+        log_label: str = "",
     ) -> dict[str, Any] | None:
         if not self.auth_token:
             logger.error("Not authenticated. Call `authenticate()` first.")
             return None
 
-        url = f"{self.base_url}/{endpoint.lstrip('/')}"
+        base = self.base_url.rstrip("/") + "/"
+        url = urljoin(base, endpoint.lstrip("/"))  # Safely concatenate the URL.
+
         start = time.time()
         status = 500
         try:
-            response: requests.Response = self.session.request(method=method, url=url, json=data)
-            duration = (time.time() - start) * 1000
+            response: requests.Response = self.session.request(
+                method=method, url=url, json=data
+            )
+            duration_ms = (time.time() - start) * 1000
             status = response.status_code
-            _log_event(method, endpoint, status, duration, log_label or "Request")
+            _log_event(method, endpoint, status, duration_ms, log_label or "Request")
 
             if status == 204 or not response.text.strip():
                 return {}
 
             return response.json()
         except requests.RequestException as exc:
-            duration = (time.time() - start) * 1000
-            _log_event(method, endpoint, status, duration, log_label or "Request failed")
+            duration_ms = (time.time() - start) * 1000
+            _log_event(
+                method, endpoint, status, duration_ms, log_label or "Request failed"
+            )
             logger.error(f"Request exception: {exc}")
             return None
 
@@ -119,19 +129,32 @@ class CredoClientLite:
         return self._make_request("GET", "webhooks", log_label="Get all webhooks")
 
     def get_webhook(self, webhook_id: str) -> dict[str, Any] | None:
-        response = self._make_request("GET", f"webhooks/{webhook_id}", log_label="Get webhook")
+        response = self._make_request(
+            "GET", f"webhooks/{webhook_id}", log_label="Get webhook"
+        )
         if response:
             logger.info("Webhook config:\n" + json.dumps(response, indent=2))
         return response
 
     def create_webhook(self, webhook_data: dict[str, Any]) -> dict[str, Any] | None:
-        return self._make_request("POST", "webhooks", data=webhook_data, log_label="Create webhook")
+        return self._make_request(
+            "POST", "webhooks", data=webhook_data, log_label="Create webhook"
+        )
 
-    def update_webhook(self, webhook_id: str, webhook_data: dict[str, Any]) -> dict[str, Any] | None:
-        return self._make_request("PATCH", f"webhooks/{webhook_id}", data=webhook_data, log_label="Update webhook")
+    def update_webhook(
+        self, webhook_id: str, webhook_data: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        return self._make_request(
+            "PATCH",
+            f"webhooks/{webhook_id}",
+            data=webhook_data,
+            log_label="Update webhook",
+        )
 
     def delete_webhook(self, webhook_id: str) -> bool:
-        result = self._make_request("DELETE", f"webhooks/{webhook_id}", log_label="Delete webhook")
+        result = self._make_request(
+            "DELETE", f"webhooks/{webhook_id}", log_label="Delete webhook"
+        )
         return result is not None
 
 
@@ -139,6 +162,8 @@ if __name__ == "__main__":
     client = CredoClientLite.load_config()
 
     if client.authenticate():
-        client.get_webhooks()
+        webhooks = client.get_webhooks()
+        if webhooks:
+            logger.info("Webhooks:\n" + json.dumps(webhooks, indent=2))
     else:
         logger.error("Authentication failed.")
