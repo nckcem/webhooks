@@ -186,7 +186,7 @@ Triggered when a specific metadata field on a use case is modified.
 | `questionnaire_ids`   | `use_case_questionnaire_ids_updated`   | Associated questionnaire IDs            |
 
 #### 4.2.2 Example Payload
-
+- Note that `governance_status` is 🛑 DEPRECATED.
 ```json
 {
   "data": {
@@ -216,7 +216,7 @@ Triggered when a specific metadata field on a use case is modified.
 
 **Event Type:** `use_case_custom_field_updated`
 
-Triggered when a custom field is created, updated, or removed from a use case.
+Triggered when custom metadata is updated. `customFieldId` can be used to determine what custom field has been updated. In this case, a custom field called `Target Review Date` with an ID of `qPSHywBSDF9HXwBVvrwKJ2` has been updated.
 
 #### 4.3.1 Example Payload
 
@@ -279,7 +279,7 @@ The webhook event's data payload has the following fields:
 
 > **Note:** This event type is deprecated. Use `use_case_comment` instead for new implementations.
 
-Triggered when a comment is added to a review or a reply is made.
+Triggered when a comment is added to a review, or when a comment on a review is replied to. This example responds to an `event_type` defined as `use_case_review_comment`.
 
 ```json
 {
